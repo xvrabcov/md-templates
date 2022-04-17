@@ -1,0 +1,56 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemplate_blocks}
+
+% Definition of colours
+\definecolor{algae}{HTML}{93DFB8} % pale green
+\definecolor{black}{HTML}{000000} % black
+
+% Default colour scheme
+\newcommand{\backgroundColor}{algae}
+\newcommand{\textColor}{black}
+
+
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{enumitem}
+
+\markdownSetup{
+  jekyllData = true,
+  rendererPrototypes = {
+    documentBegin = {%
+      \begin{tikzpicture}[remember picture, minimum width=1cm, overlay]%
+        \draw%
+          let%
+            \p1=(current page.south west),%
+            \p2=(current page.south east),%
+            \p3=(current page.north west),%
+          in%
+            (\x2, \y2) node[rotate=-30, \backgroundColor, fill, anchor=south east, minimum height=\y3 - \y2, minimum width=4cm] (sqr) {};%
+      \end{tikzpicture}%
+    },
+    headingOne = {%
+      \Large\MakeUppercase{\textbf{#1}}\par%
+      \normalsize%
+    },
+    headingTwo = {%
+      \textcolor{gray}{\textbf{#1}}\par%
+    },
+    ulBegin = {%
+      \vfill%
+      \begin{itemize}[leftmargin=0.40in]%
+    },
+    ulEnd = {%
+      \end{itemize}%
+      \vfill%
+    },
+  },
+}
+
+% Replacing item bullets
+\renewcommand{\labelitemi}{%
+  \textcolor{\backgroundColor}{\rotatebox[origin=c]{45}{$\blacksquare$}}%
+}
+
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdcard@#1\endcsname{#2}%
+}

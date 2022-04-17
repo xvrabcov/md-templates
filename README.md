@@ -1,0 +1,2 @@
+# Markdown? In my LaTeX?
+This repository contains a number of LaTeX templates utilising the [witiko/markdown](https://github.com/witiko/markdown) package with the goal to separate the form from the content and enable the users to focus on their writings, instead of trying to figure out the formatting.

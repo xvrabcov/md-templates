@@ -1,0 +1,184 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemplate_blocks}
+
+% Definition of colours
+\definecolor{algae}{HTML}{93DFB8} % pale green
+\definecolor{black}{HTML}{000000} % black
+
+% Default colour scheme
+\newcommand{\backgroundColor}{algae}
+\newcommand{\textColor}{black}
+
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+
+\def\mdauthorbio@header{%
+  \noindent%
+  \hspace{-3.5pt}%
+  \begin{tikzpicture}[remember picture, minimum height=1cm]
+    \node (title) {\textbf{\Huge{\MakeUppercase{\mdauthorbio@title}}}};
+    \draw%
+      let%
+        \p1=(title.north east),%
+        \p2=(title.south east),%
+        \p3=(current page.east)%
+      in%
+        (\x3, \y1) node[\backgroundColor, fill, anchor=north east, minimum height=\y1 - \y2, minimum width=2.5cm] (sqr) {};%
+    \draw%
+      let%
+        \p1=(sqr.west)%
+      in%
+        (\x1 - 0.5cm, \y1) node[anchor=east] (logo) {\includegraphics[width=2.5cm, keepaspectratio]{logo}};%
+  \end{tikzpicture}%
+  \large%
+  \vspace{0.5cm}\par%
+  \Huge{\mdauthorbio@author}\large\par%
+}
+
+\newcounter{commCounter}
+\setcounter{commCounter}{3}
+\newif\ifaddro
+
+\def\mdauthorbio@footer{%
+  \ifx\mdauthorbio@email\empty\addtocounter{commCounter}{-1}\fi%
+  \ifx\mdauthorbio@phone\empty\addtocounter{commCounter}{-1}\fi%
+  \ifx\mdauthorbio@address\empty\addtocounter{commCounter}{-1}\fi%
+  \ifnum\value{commCounter}=1 \addrotrue\fi
+  \begin{tikzpicture}[remember picture, overlay, minimum height=1cm]%
+    \coordinate (point) at (current page.south west);%
+    \draw%
+      let%
+        \p1=([xshift=2.5cm, yshift=2.5cm]point),%
+        \p2=(current page.south west),%
+        \p3=(current page.south east)%
+      in%
+        (\x1 + 4cm, \y2) node[anchor=south west, \backgroundColor, fill, minimum width=\x3 - \x1 + 4cm, minimum height=\y3 - \y2 + 5cm] (f) {};%
+    \ifx\mdauthorbio@url\empty\else
+    \draw%
+      let%
+        \p1=([xshift=2.5cm, yshift=2.5cm]point),%
+        \p2=(current page.south west)%
+      in%
+        (\x1, \y2 + 1cm) node[anchor=south west] (x) {{\qrcode[hyperlink, height=3cm]{\mdauthorbio@url}}};%
+     \fi
+     \coordinate%
+       let%
+         \p1=(f.west),%
+         \p2=(current page.south east)%
+       in%
+         (\x1 + 0.5cm, \y1 + 1.25cm) node (a) {};%
+     \coordinate%
+       let%
+         \p1=(f.west),%
+         \p2=(current page.south east)%
+       in%
+         (\x2 - 2.5cm, \y1 + 1.25cm) node (b) {};%
+     \draw[\textColor, line width=0.05mm] ($(a) - (0, 1.25cm)$) -- ($(b) - (0, 1.25cm)$);%
+     \node[\textColor, anchor=west, align=left] at ([xshift=0cm]a) {%
+       \setlength{\tabcolsep}{5pt}
+       \begin{tabularx}{0.7\textwidth}{%
+         >{\centering\arraybackslash}X 
+         >{\centering\arraybackslash}X
+         >{\centering\arraybackslash}X
+       }
+         \ifx\mdauthorbio@email\empty%
+           \else%
+             \ifaddro
+               \makebox{\faEnvelope\hspace{0.125in}%
+               \makebox{\mdauthorbio@email}}%
+             \else
+               \makebox{\faEnvelope\hspace{0.125in}\parbox{1.5in}%
+               {\mdauthorbio@email}}%
+             \fi%
+             \addtocounter{commCounter}{-1}%
+             \ifboolexpe{%
+               test %
+               {%
+                 \ifnumequal{\thecommCounter}{0}%
+               }%
+            }{}{&}
+         \fi%
+         \ifx\mdauthorbio@phone\empty%
+           \else%
+             \ifaddro
+               \makebox{\faPhone\hspace{0.125in}%
+               \makebox{\mdauthorbio@phone}}%
+             \else
+               \makebox{\faPhone\hspace{0.125in}\parbox{1.5in}%
+               {\mdauthorbio@phone}}%
+             \fi%
+             \addtocounter{commCounter}{-1}%
+             \ifboolexpe{%
+               test %
+               {%
+                 \ifnumequal{\thecommCounter}{0}%
+               }%
+             }{}{&}
+ 	     \fi%
+         \ifx\mdauthorbio@address\empty%
+           \else%
+             \ifaddro
+               \makebox{\faGlobe\hspace{0.125in}%
+               \makebox{\mdauthorbio@address}}%
+             \else
+               \makebox{\faGlobe\hspace{0.125in}\parbox{1.5in}%
+               {\mdauthorbio@address}}%
+             \fi%
+         \fi\\%  
+       \end{tabularx}%
+     };%
+  \end{tikzpicture}
+}
+
+
+\markdownSetup
+{
+  jekyllData = true,
+  rendererPrototypes={
+    link = {%
+      \begin{minipage}{\textwidth}
+        \emph{#1}\\%
+        \url{#2}\par%
+      \end{minipage}
+      \vspace{0.5cm}%
+    }, 
+    headingOne = {%
+      \vspace{0.25in}%
+      {\LARGE{\textbf{#1}}}\par\large%
+    },
+    headingTwo = {%
+      \vspace{0.25in}%
+      {\Large{\textbf{#1}}}\par\large%
+    },
+    interblockSeparator = {%
+      \par\par%
+    },
+    horizontalRule = {%
+      \pagebreak%  
+    }, 
+    image = {%
+      \begin{wrapfigure}{r}{5cm}
+        \includegraphics[width=\linewidth, keepaspectratio]{#2}%
+        \vspace{-1cm}%
+      \end{wrapfigure}%
+    },
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdauthorbio@#1\endcsname{#2}%
+}
+
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdauthorbio@header%
+  \mdauthorbio@footer%
+}
+
+
+\pagestyle{fancy}
+\fancyfoot[C]{\ifthenelse{\value{page}=1}{\vspace{3cm} \textcolor{\textColor}{\textbf{Page \thepage}}}{\vspace{1.5cm}Page \thepage}}
+\lfoot{}
+\rfoot{}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}

@@ -1,0 +1,180 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemplate_blocks}
+
+% Definition of colours
+\definecolor{algae}{HTML}{93DFB8} % pale green
+\definecolor{black}{HTML}{000000} % black
+
+% Default colour scheme
+\newcommand{\backgroundColor}{algae}
+\newcommand{\textColor}{black}
+
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+
+\def\mdbkgfacts@header{%
+  \noindent%
+  \hspace{-3.5pt}%
+  \begin{tikzpicture}[remember picture, minimum height=1cm]
+    \node (title) {\textbf{\Huge{\MakeUppercase{\mdbkgfacts@title}}}};
+    \draw%
+      let%
+        \p1=(title.north east),%
+        \p2=(title.south east),%
+        \p3=(current page.east)%
+      in%
+        (\x3, \y1) node[\backgroundColor, fill, anchor=north east, minimum height=\y1 - \y2, minimum width=2.5cm] (sqr) {};%
+    \draw%
+      let%
+        \p1=(sqr.west)%
+      in%
+        (\x1 - 0.5cm, \y1) node[anchor=east] (logo) {\includegraphics[width=2.5cm, keepaspectratio]{logo}};%
+  \end{tikzpicture}%
+  \large%
+  \vspace{0.5cm}\par%
+  \Huge{\mdbkgfacts@booktitle}\par\vspace{0.25cm}%
+  \hspace{0.5cm} \Large{by} \par\vspace{0.25cm}%
+  \Huge{\mdbkgfacts@author}\large\par%
+}
+
+\newcounter{commCounter}
+\setcounter{commCounter}{3}
+\newif\ifaddro
+
+\def\mdbkgfacts@footer{%
+  \ifx\mdbkgfacts@email\empty\addtocounter{commCounter}{-1}\fi%
+  \ifx\mdbkgfacts@phone\empty\addtocounter{commCounter}{-1}\fi%
+  \ifx\mdbkgfacts@address\empty\addtocounter{commCounter}{-1}\fi%
+  \ifnum\value{commCounter}=1 \addrotrue\fi
+  \begin{tikzpicture}[remember picture, overlay, minimum height=1cm]%
+    \coordinate (point) at (current page.south west);%
+    \draw%
+      let%
+        \p1=([xshift=2.5cm, yshift=2.5cm]point),%
+        \p2=(current page.south west),%
+        \p3=(current page.south east)%
+      in%
+        (\x1 + 4cm, \y2) node[anchor=south west, \backgroundColor, fill, minimum width=\x3 - \x1 + 4cm, minimum height=\y3 - \y2 + 5cm] (f) {};%
+    \ifx\mdbkgfacts@url\empty\else
+    \draw%
+      let%
+        \p1=([xshift=2.5cm, yshift=2.5cm]point),%
+        \p2=(current page.south west)%
+      in%
+        (\x1, \y2 + 1cm) node[anchor=south west] (x) {{\qrcode[hyperlink, height=3cm]{\mdbkgfacts@url}}};%
+     \fi
+     \coordinate%
+       let%
+         \p1=(f.west),%
+         \p2=(current page.south east)%
+       in%
+         (\x1 + 0.5cm, \y1 + 1.25cm) node (a) {};%
+     \coordinate%
+       let%
+         \p1=(f.west),%
+         \p2=(current page.south east)%
+       in%
+         (\x2 - 2.5cm, \y1 + 1.25cm) node (b) {};%
+     \draw[\textColor, line width=0.05mm] ($(a) - (0, 1.25cm)$) -- ($(b) - (0, 1.25cm)$);%
+     \node[\textColor, anchor=west, align=left] at ([xshift=0cm]a) {%
+       \setlength{\tabcolsep}{5pt}
+       \begin{tabularx}{0.7\textwidth}{%
+         >{\centering\arraybackslash}X 
+         >{\centering\arraybackslash}X
+         >{\centering\arraybackslash}X
+       }
+         \ifx\mdbkgfacts@email\empty%
+           \else%
+             \ifaddro
+               \makebox{\faEnvelope\hspace{0.125in}%
+               \makebox{\mdbkgfacts@email}}%
+             \else
+               \makebox{\faEnvelope\hspace{0.125in}\parbox{1.5in}%
+               {\mdbkgfacts@email}}%
+             \fi%
+             \addtocounter{commCounter}{-1}%
+             \ifboolexpe{%
+               test %
+               {%
+                 \ifnumequal{\thecommCounter}{0}%
+               }%
+            }{}{&}
+         \fi%
+         \ifx\mdbkgfacts@phone\empty%
+           \else%
+             \ifaddro
+               \makebox{\faPhone\hspace{0.125in}%
+               \makebox{\mdbkgfacts@phone}}%
+             \else
+               \makebox{\faPhone\hspace{0.125in}\parbox{1.5in}%
+               {\mdbkgfacts@phone}}%
+             \fi%
+             \addtocounter{commCounter}{-1}%
+             \ifboolexpe{%
+               test %
+               {%
+                 \ifnumequal{\thecommCounter}{0}%
+               }%
+             }{}{&}
+ 	     \fi%
+         \ifx\mdbkgfacts@address\empty%
+           \else%
+             \ifaddro
+               \makebox{\faGlobe\hspace{0.125in}%
+               \makebox{\mdbkgfacts@address}}%
+             \else
+               \makebox{\faGlobe\hspace{0.125in}\parbox{1.5in}%
+               {\mdbkgfacts@address}}%
+             \fi%
+         \fi\\%  
+       \end{tabularx}%
+     };%
+  \end{tikzpicture}
+}
+
+
+\markdownSetup
+{
+  jekyllData = true,
+  rendererPrototypes={
+    link = {%
+      \begin{minipage}{\textwidth}
+        \emph{#1}\\%
+        \url{#2}\par%
+      \end{minipage}
+      \vspace{0.5cm}%
+    }, 
+    headingOne = {%
+      \vspace{0.25in}%
+      {\LARGE{\textbf{#1}}}\par\large%
+    },
+    headingTwo = {%
+      \vspace{0.25in}%
+      {\Large{\textbf{#1}}}\par\large%
+    },
+    interblockSeparator = {%
+      \par\par%
+    },
+    horizontalRule = {%
+      \pagebreak%  
+    }, 
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdbkgfacts@#1\endcsname{#2}%
+}
+
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdbkgfacts@header%
+  \mdbkgfacts@footer%
+}
+
+
+\pagestyle{fancy}
+\fancyfoot[C]{\ifthenelse{\value{page}=1}{\vspace{3cm} \textcolor{\textColor}{\textbf{Page \thepage}}}{\vspace{1.5cm}Page \thepage}}
+\lfoot{}
+\rfoot{}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
