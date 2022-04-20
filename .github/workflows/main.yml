@@ -1,0 +1,48 @@
+name: Tpeset example documents
+on:
+  push:
+jobs:
+  typeset:
+    name: Typeset example documents
+    runs-on: ubuntu-latest
+    container:
+      image: witiko/markdown:latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: latexmk -shell-escape -lualatex -cd author_profile/example
+      - run: mv author_profile/example.pdf author_profile-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd background_facts/example
+      - run: mv background_facts/example.pdf background_facts-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd business_card/example
+      - run: mv business_card/example.pdf business_card-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd press_release/example
+      - run: mv press_release/example.pdf press_release-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd qna/example
+      - run: mv qna/example.pdf qna-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd report/example
+      - run: mv report/example.pdf report-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd scenario/example
+      - run: mv scenario/example.pdf scenario-example.pdf
+
+      - uses: marvinpinto/action-automatic-releases@latest
+        if: github.ref == 'refs/heads/main'
+        with:
+          title: The latest example documents
+          automatic_release_tag: latest
+          prerelease: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          files: |
+            author_profile-example.pdf
+            background_facts-example.pdf
+            business_card-example.pdf
+            press_release-example.pdf
+            qna-example.pdf
+            report-example.pdf
+            scenario-example.pdf
