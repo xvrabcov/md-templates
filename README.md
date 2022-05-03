@@ -22,7 +22,7 @@ The contents of this file can be changed.
 
 Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
 
-![Example output of the business card](business_card-output.pdf)
+![Example output of the business card](business_card-output.png)
 
 
 The development of these templates has been a part of the research project [MUNI/33/0776/2021](https://www.muni.cz/en/research/projects/62168), funded by the Faculty of Informatics, Masaryk University.
