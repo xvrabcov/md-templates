@@ -1,0 +1,54 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemplate_blocks}
+
+% Definition of colours
+\definecolor{algae}{HTML}{93DFB8} % pale green
+\definecolor{black}{HTML}{000000} % black
+
+% Default colour scheme
+\newcommand{\backgroundColor}{algae}
+\newcommand{\textColor}{black}
+
+\pagestyle{empty}%
+
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+
+\def\mdenvelope@layout{%
+  \begin{tikzpicture}[overlay, remember picture]
+    \draw%
+      let%
+        \p1=(current page.north west),%
+        \p2=(current page.south west),%
+      in%
+        (current page.north west) node[anchor=north west, \backgroundColor, fill, minimum height=\paperheight, minimum width=3.25in] (sqr) {};%
+    \node[draw, anchor=north east, xshift=-0.25in, yshift=-0.25in, minimum width=0.8in, minimum height=0.9in] (x) at (current page.north east) {};
+  \end{tikzpicture}
+  \begin{minipage}[t][0.95\textheight][t]{3.125in}
+    \vspace{0.5in}
+    \Large%
+    \begin{center}%
+      \begin{tabular}{l}%
+        \mdenvelope@address%
+      \end{tabular}%
+    \end{center}%
+    \par%
+    \vfill%
+    \begin{center}%
+      \includegraphics[width=0.5\textwidth, keepaspectratio]{images/logo}%
+    \end{center}%
+  \end{minipage}%
+}
+
+\markdownSetup
+{
+  jekyllData = true,
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdenvelope@#1\endcsname{#2}%
+}
+
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdenvelope@layout%
+}

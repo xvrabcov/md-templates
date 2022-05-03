@@ -1,0 +1,46 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemplate_blocks}
+
+% Definition of colours
+\definecolor{algae}{HTML}{93DFB8} % pale green
+\definecolor{black}{HTML}{000000} % black
+
+% Default colour scheme
+\newcommand{\backgroundColor}{algae}
+\newcommand{\textColor}{black}
+
+\color{\textColor}\global\let\default@color\current@color
+\pagecolor{\backgroundColor}
+
+\pagestyle{empty}%
+
+\markdownSetup
+{
+  jekyllData = true,
+  rendererPrototypes={
+    image = {%
+      \includegraphics[width=\textwidth, keepaspectratio]{#2}%
+    },
+    blockQuoteBegin = {%
+      \null%
+      \vfill%
+      \itshape%
+      \begin{quotation}%
+        \centering\noindent%
+    },
+    blockQuoteEnd = {%
+      \end{quotation}%
+      \vfill%
+    },
+    link = {%
+      \begin{center}%
+        \qrcode{#2}\par%
+        #1
+      \end{center}%
+      \vspace{1.25cm}%
+    },  
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdbookmark@#1\endcsname{#2}%
+}

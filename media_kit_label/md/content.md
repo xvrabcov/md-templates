@@ -1,0 +1,1 @@
+![LaTeX label](logo.png)
