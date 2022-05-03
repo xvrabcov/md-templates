@@ -1,7 +1,14 @@
 \documentclass[
-    11pt,
-    letterpaper
-]{mdreport}
+  10pt,
+]{mdcard}
+
+\usepackage
+[%
+  paperheight=2.25in,%
+  paperwidth=3.75in,%
+  margin=0.25in,%
+  left=0.125in%
+]{geometry}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -13,9 +20,6 @@
 \setlength{\parindent}{0em}
 \setlength{\parskip}{1em}
 
-\graphicspath{{./images/}}
-
 \begin{document}
-  \oneormorepages
-  \markdownInput{md/content.md}
+  \markdownInput{example.md}
 \end{document}
