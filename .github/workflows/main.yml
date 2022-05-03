@@ -10,44 +10,59 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: latexmk -shell-escape -lualatex -cd author_profile/example
-      - run: mv author_profile/example.pdf author_profile-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd author_profile/driver
+      - run: mv author_profile/driver.pdf author_profile-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd background_facts/example
-      - run: mv background_facts/example.pdf background_facts-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd background_facts/driver
+      - run: mv background_facts/driver.pdf background_facts-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd book_facts/example
-      - run: mv book_facts/example.pdf book_facts-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd book_facts/driver
+      - run: mv book_facts/driver.pdf book_facts-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd book_proposal/example
-      - run: mv book_proposal/example.pdf book_proposal-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd book_proposal/driver
+      - run: mv book_proposal/driver.pdf book_proposal-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd business_card/example
-      - run: mv business_card/example.pdf business_card-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd bookmark/driver
+      - run: mv bookmark/driver.pdf bookmark-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd content_outline/example
-      - run: mv content_outline/example.pdf content_outline-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd business_card/driver
+      - run: mv business_card/driver.pdf business_card-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd marketing_plan/example
-      - run: mv marketing_plan/example.pdf marketing_plan-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd content_outline/driver
+      - run: mv content_outline/driver.pdf content_outline-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd poster/example
-      - run: mv poster/example.pdf poster-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd envelope/driver
+      - run: mv envelope/driver.pdf envelope-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd press_release/example
-      - run: mv press_release/example.pdf press_release-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd letterhead/driver
+      - run: mv letterhead/driver.pdf letterhead-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd publishing_plan/example
-      - run: mv publishing_plan/example.pdf publishing_plan-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd marketing_plan/driver
+      - run: mv marketing_plan/driver.pdf marketing_plan-example.pdf
+  
+      - run: latexmk -shell-escape -lualatex -cd media_kit_label/driver
+      - run: mv media_kit_label/driver.pdf media_kit_label-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd qna/example
-      - run: mv qna/example.pdf qna-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd postcard/driver
+      - run: mv postcard/driver.pdf postcard-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd report/example
-      - run: mv report/example.pdf report-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd poster/driver
+      - run: mv poster/driver.pdf poster-example.pdf
 
-      - run: latexmk -shell-escape -lualatex -cd scenario/example
-      - run: mv scenario/example.pdf scenario-example.pdf
+      - run: latexmk -shell-escape -lualatex -cd press_release/driver
+      - run: mv press_release/driver.pdf press_release-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd publishing_plan/driver
+      - run: mv publishing_plan/driver.pdf publishing_plan-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd qna/driver
+      - run: mv qna/driver.pdf qna-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd report/driver
+      - run: mv report/driver.pdf report-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd scenario/driver
+      - run: mv scenario/driver.pdf scenario-example.pdf
 
       - uses: marvinpinto/action-automatic-releases@latest
         if: github.ref == 'refs/heads/main'
@@ -61,9 +76,14 @@ jobs:
             background_facts-example.pdf
             book_facts-example.pdf
             book_proposal-example.pdf
+            bookmark-example.pdf
             business_card-example.pdf
             content_outline-example.pdf
+            envelope-example.pdf
+            letterhead-example.pdf
             marketing_plan-example.pdf
+            media_kit_label-example.pdf
+            postcard-example.pdf
             poster-example.pdf
             press_release-example.pdf
             publishing_plan-example.pdf
