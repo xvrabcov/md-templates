@@ -1,4 +1,4 @@
-name: Tpeset example documents
+name: Typeset example documents
 on:
   push:
 jobs:
@@ -15,6 +15,9 @@ jobs:
 
       - run: latexmk -shell-escape -lualatex -cd background_facts/driver
       - run: mv background_facts/driver.pdf background_facts-example.pdf
+
+      - run: latexmk -shell-escape -lualatex -cd book/driver
+      - run: mv book/driver.pdf book-example.pdf
 
       - run: latexmk -shell-escape -lualatex -cd book_facts/driver
       - run: mv book_facts/driver.pdf book_facts-example.pdf
@@ -74,6 +77,7 @@ jobs:
           files: |
             author_profile-example.pdf
             background_facts-example.pdf
+            book-example.pdf
             book_facts-example.pdf
             book_proposal-example.pdf
             bookmark-example.pdf

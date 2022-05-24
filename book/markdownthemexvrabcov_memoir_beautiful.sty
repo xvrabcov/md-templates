@@ -1,0 +1,578 @@
+\ProvidesPackage{markdownthemexvrabcov_memoir_beautiful}
+
+\markdownSetup{
+  contentBlocks = true,
+  codeSpans = false,
+  citations,
+  definitionLists = true,
+  fencedCode = true,
+  footnotes = true,
+  html,
+  jekyllData,
+  pipeTables,
+  smartEllipses,
+  tableCaptions = true,
+  taskLists = true,
+  tightLists = false,
+  rendererPrototypes = {
+    link = {%
+      \url{#3}%
+    },
+    ulBegin = {%
+      \setlist[itemize,1]{leftmargin=0.375in}
+      \begin{itemize}%
+    },
+    ulEnd = {%
+      \end{itemize}%
+      \setlist[itemize,1]{leftmargin=*}
+    },
+    horizontalRule = {%
+        \vspace{0.25in}%
+        \noindent\rule{\textwidth}{0.125pt}%
+        \vspace{0.25in}%
+    },
+    headingThree = {%
+      \noindent #1%    
+    },
+    blockQuoteBegin = {%
+        \itshape%
+        \begin{quoting}[vskip=0pt]%
+          \setlength{\leftskip}{-0.375in}%
+          \setlength{\rightskip}{-0.375in}%
+          \noindent%
+      },
+      blockQuoteEnd = {%
+        \end{quoting}%
+        \normalfont%
+      },
+  },
+}
+
+\renewcommand{\baselinestretch}{1} % baseline skip
+\setlength\parindent{0.25in}      % setting size of the indent
+
+%% Solution to decide whether the input string is a macro
+%% Source: 
+%% | https://tex.stackexchange.com/questions/307347/what-is-the-best-way-to-check-if-an-argument-of-a-control-sequence-is-a-control |
+\long\def\firstoftwo#1#2{#1} \long\def\secondoftwo#1#2{#2}
+\def\AtIfArgsFirstTokenIsMacro#1#2{%
+  \long\def\AtIfArgsFirstTokenIsMacro##1##2##3{%
+    \romannumeral\iffalse{\fi\expandafter\secondoftwo\expandafter
+    {\expandafter{\string##1}\expandafter\expandafter\expandafter
+    \firstoftwo\expandafter\expandafter\expandafter\firstoftwo
+    \expandafter\secondoftwo\expandafter{\expandafter{\iffalse}}\fi
+    \expandafter\secondoftwo\string}\expandafter\firstoftwo
+    \expandafter{\iffalse}\fi\iffalse{\fi
+    \expandafter\innerAtIfArgsFirstTokenIsMacro\meaning##1#1}{}%
+      {%
+        \iffalse{\fi
+        \expandafter\innerAtIfArgsFirstTokenIsLong\meaning##1#2 #1}{}%
+      }{\secondoftwo}%
+    }{\firstoftwo}%
+    {0 ##3}{0 ##2}%
+  }%
+  \long\def\innerAtIfArgsFirstTokenIsMacro##1#1{%
+    \innerAtIfArgsFirstTokenIs{##1}%
+  }%
+  \long\def\innerAtIfArgsFirstTokenIsLong##1#2 #1{%
+    \innerAtIfArgsFirstTokenIs{##1}%
+  }%
+  \long\def\innerAtIfArgsFirstTokenIs##1{%
+    \iffalse{\fi\expandafter\secondoftwo\expandafter{\string##1}%
+    \expandafter\firstoftwo\expandafter{\iffalse}\fi\expandafter
+    \expandafter\expandafter\firstoftwo}{\expandafter\expandafter
+    \expandafter\secondoftwo}\expandafter\secondoftwo\expandafter
+    {\iffalse}\fi
+  }%
+}%
+\begingroup
+\edef\AtIfArgsFirstTokenIsMacro{%
+  {\string m\string a\string c\string r\string o%
+  \string :}{\string\long}%
+}%
+\expandafter\endgroup%
+\expandafter\AtIfArgsFirstTokenIsMacro%
+\AtIfArgsFirstTokenIsMacro%
+
+\usepackage{expl3}
+\usepackage{xparse}
+
+\let\trjnzel\texttrjn
+
+\RequirePackage{ifthen}   % ifthenelse command
+\RequirePackage{ragged2e} % text justification
+
+% Special style for the books by page
+\markdownSetupSnippet{booksBy}{
+  rendererPrototypes = {
+    documentBegin = {%
+      \thispagestyle{empty}%
+    },
+    interblockSeparator = {%
+      \par\medskip
+      \let\markdownRendererInterblockSeparatorPrototype\par
+    },
+  },
+}
+
+% Special style for the title page
+\markdownSetupSnippet{titlePage}{
+  rendererPrototypes = {
+    headingOne = {%		% Title on the title page
+      \fontsize{27}{38}%
+      \selectfont\textls{\trjnzel{#1}}%
+        \fontsize{20}{30}\selectfont%
+        \par%  
+    },
+    headingTwo = {%		% Italics in the title
+      \fontsize{27}{38}%
+      \selectfont\MakeLowercase{%
+        \textit{#1\ }%
+        }%    
+    },
+    headingThree = {%	% Subtitle
+      \vspace{0.4in}%
+      \fontsize{20}{24}\selectfont{#1}%
+      \par%   
+    },
+    ulBegin = {%			% unordered list of authors
+      \vfill%
+      \fontsize{18}{22}\selectfont%
+      \begin{itemize}%
+        \centering%
+    },
+    ulEnd = {%
+      \end{itemize}%    
+    },
+    ulItem = {%			% removal of item bullets
+      \item[ ]%    
+    },
+    documentBegin = {%
+      \thispagestyle{empty}%
+      %\SetTracking{encoding=*}{ 200 }%
+      \null%
+      \vspace{1.125in}%
+      \centering%  
+    },
+    interblockSeparator = {},
+  },
+}
+
+% Special style for the copyright page
+\markdownSetupSnippet{copyrightPage}{
+  rendererPrototypes = {
+    interblockSeparator = {%
+      \par%	  
+    },
+    blockQuoteBegin = {%		% Text of the copyright
+      \vspace{0.25in}%
+      \begin{quotation}%
+        \noindent%
+    },
+    blockQuoteEnd = {%
+      \end{quotation}%
+      \vspace{-0.5in}%	
+    },
+    documentBegin = {%
+      \makeatletter\def\fps@figure{H}\makeatother%  	% Changing default position of image
+      \setkeys{Gin}{width=0.3\textwidth}%			  	% for the copyright page
+      \thispagestyle{empty}%
+      \null%		% Flush the text	
+      \vfill%	% to the bottom
+      \centering%	
+    },
+  },
+}
+
+% Special style for the page with dedication(s)
+\markdownSetupSnippet{dedication}{%
+  rendererPrototypes = {
+    documentBegin = {%
+      \null%			% Center the text
+      \vfil%			% vertically on the page
+      \thispagestyle{empty}%
+      %\SetTracking{encoding=*}{ 200 }%
+    },
+    headingOne = {%	% Dedication text
+      \centering%
+      \MakeUppercase{\trjnzel{#1}}%
+    },
+    headingTwo = {%	% Dedication author's name
+      \begin{center}%
+        \fontsize{10}{18}\selectfont%
+        \MakeUppercase{\trjnzel{#1}}%
+      \end{center}%
+      \vspace{0.5in}%
+    },
+  },
+}
+
+% Heading for starred chapter
+\markdownSetupSnippet{hideChapterFromToC}{
+  rendererPrototypes = {
+    headingOne = {%
+      \chapter*{#1}%
+      \markboth{\MakeUppercase{#1}}{\MakeUppercase{#1}}%
+    },
+    headingTwo = {%
+      \section*{#1}%	
+    },
+  },
+}
+
+% Remove sections of specific chapter in ToC
+\markdownSetupSnippet{hideSectionFromToC}{
+  rendererPrototypes = {
+    headingOne = {%
+      \chapter{#1}%  
+    },
+    headingTwo = {%
+      \section*{#1}%	
+    },
+  },
+}
+
+% Styles for titles, headings, ToC
+\RequirePackage{fmtcount} 	% Conversion of roman numerals
+						 	% to its word equivalent
+\RequirePackage{xcolor}		% Coloration of titles
+\RequirePackage[explicit]{titlesec} % Formatting of titles
+\RequirePackage{titletoc}	% Formatting of ToC
+\RequirePackage{setspace}%
+
+
+\newcommand*{\IsInteger}[3]{%	% Checks if string
+  \IfStrEq{#1}{ }{%				% is an integer
+    #3 % if string empty
+  }{%
+    \IfInteger{#1}{#2}{#3}%
+  }%
+}
+
+% Formatting for chapter title
+\titlespacing*{\chapter}{0in}{0in}{0in}
+
+\newif\ifindex
+\indexfalse
+
+\titleformat
+{\chapter} % command
+[display] % shape
+{} % format
+{} % label
+{0in} % sep
+{%
+    \linespread{0.75} % line spacing
+    \IsInteger{\thechapter}{%		% Checks chapter has a number
+      \begin{minipage}[t][1in][b]{\textwidth}
+      \centering
+      \ifnum\thechapter=0\else%		% Checks chapter is not introductory
+        \fontsize{20}{40}\selectfont%
+        \textls{%
+          \texttrjn{%
+            \color{gray}{%
+              \MakeUppercase{%
+           chapter \NUMBERstringnum{\arabic{chapter}}%
+              }%	
+            }%		% Colors `Chapter X` gray
+          }}\\%
+      \fi
+      \fontsize{20}{40}\selectfont%
+        \textls{\trjnzel{#1}}%
+      \end{minipage}%
+    }{\centering\fontsize{20}{40}\selectfont%
+      \ifindex%
+        \textls{\trjnzel{Index}}%% Prints only Index title
+      \else%
+        \textls{\trjnzel{\chaptertitlename \  \thechapter}}% 
+      \fi%
+    }%
+} % before-code
+[
+    \fontsize{11}{15}\selectfont%
+    \justifying%
+    \vspace{0.25in}		% Space after title
+] % after-code
+
+
+% Formatting for part title
+\titlespacing*{\part}{0in}{-0.25in}{0in}
+
+\titleformat{\part}[hang]{}{}{0in}{#1}
+
+\titleformat
+{\part} % command
+[display] % shape
+{} % format
+{} % label
+{0in} % sep
+{
+    \linespread{0.75}
+    \thispagestyle{epigraph}%
+    \begin{minipage}[t][3.25in][b]{\textwidth}
+    \begin{center}
+    \fontsize{20}{40}\selectfont%
+      \textls{%
+        \texttrjn{%
+          \color{gray}{%
+            \MakeUppercase{%
+              part \NUMBERstringnum{\arabic{part}}%
+            }%
+          }}\\%		% Colors `Part X` gray
+        \color{black}{\trjnzel{#1}}%
+      }%
+      \end{center}
+    \end{minipage}
+} % before-code
+[
+\vspace{0.15in}
+\rule{\textwidth}{0.125pt}
+] % after-code
+
+% Formatting for section title
+% With section number
+\titleformat
+{\section} % command
+[display] % shape
+{} % format
+{} % label
+{0in} % sep
+{
+    {\textcinzel{\thesection}\quad\trjnzel{#1}}
+} % before-code
+[
+    \vspace{-0.15in}%
+] % after-code
+
+% Without section number
+\titleformat
+{name=\section,numberless} %
+[display] %
+{} %
+{} %
+{0in} %
+{{\trjnzel{#1}}}
+[
+    \vspace{-0.15in}%
+]
+
+
+% Special style for the Table of Contents (ToC)
+\renewcommand\tableofcontents{%
+  \null\hfill%
+  {\fontsize{20}{40}\selectfont%
+    \textls{%
+      \texttrjn{%
+        \MakeUppercase{\contentsname}%
+      }%
+    }%
+  }%
+  \hfill\null\par
+  \vspace{0.5in}%
+  \@starttoc{toc}%
+}
+
+\renewcommand*{\cftpartfont}[1]{\textls{\texttrjn{\uppercase{#1}}}}	% Part titles in ToC uppercase
+\cftpagenumbersoff{part}
+\renewcommand*{\cftchapterfont}{\normalfont}
+\renewcommand*{\cftchapterpagefont}{\normalfont}
+\renewcommand*{\cftdot}{}	% No dots between title and page number
+\setlength{\cftsectionindent}{0.25in}
+\setlength\cftbeforechapterskip{5pt}
+\setlength\cftbeforesectionskip{5pt}
+
+% Typesetting headers and footers
+\RequirePackage{epigraph}
+\RequirePackage{epipart}
+\RequirePackage{xpatch}
+\RequirePackage{fancyhdr}
+
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\cfoot{}
+\fancyhf{}
+\fancyheadoffset[loh,reh]{1in}
+
+% Even page header
+\fancyhead[LE]{%
+  \fontsize{5}{10}\selectfont%
+  \textls{%
+    \thepage\  \ $\Big\vert$\  \ \MakeUppercase{\theshorttitle}%
+  }%
+}
+
+% Odd page header
+\fancyhead[RO]{%
+  \fontsize{5}{10}\selectfont%
+  \textls{%
+    \IsInteger{\thechapter}{%
+      \MakeUppercase{\leftmark}\  \ $\Big\vert$\ \ \thepage%
+    }%
+    {%
+      \ifthenelse{\equal{Index}{\leftmark}}%
+      {%
+        \MakeUppercase{\leftmark}\  \ $\Big\vert$\ \ \thepage%
+      }%
+      {%
+        \MakeUppercase{\chaptertitlename\ \thechapter}\  \ $\Big\vert$\ \ \thepage%
+      }%
+    }%
+  }%
+}
+
+\def\enoteheading{\section*{\notesname}}
+
+\assignpagestyle{\part}{fancy}
+\assignpagestyle{\chapter}{fancy}
+
+% Setting page style for the index chapter
+\indexsetup{
+  othercode={%
+    \clearpage%
+    \thispagestyle{fancy}%
+    \chaptermark{Index}%
+  }
+}
+
+
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\partmark}[1]{\markboth{#1}{}}
+
+% Special style for epigraph (not snippet)
+\newcommand{\partEpigraph}[2]{%
+  \cleardoublepage
+  \epigraphhead[4in]{\if#1\empty\else\textit{#1}\fi{\fontsize{11}{18}\selectfont\if#2\empty\else\newline--- #2\fi}}%
+}
+
+\setlength\epigraphwidth{\textwidth}
+
+% Redefinition of epigraphhead to position the epigraph and unify headers
+
+\xpatchcmd{\epigraphhead}{\@oddfoot{\reset@font\hfil\thepage\hfil}}{\@oddfoot{}}{}{}
+
+\xpatchcmd{\epigraphhead}{%
+\if@epirhs
+      \def\@oddhead{\hfil\begin{picture}(0,0)
+                         \put(0,-#1){\makebox(0,0)[r]{\@epitemp}}
+                         \end{picture}}
+    \else
+      \if@epicenter
+        \def\@oddhead{\hfil\begin{picture}(0,0)
+                           \put(0,-#1){\makebox(0,0)[b]{\@epitemp}}
+                           \end{picture}\hfil}
+      \else
+        \def\@oddhead{\begin{picture}(0,0)
+                           \put(0,-#1){\makebox(0,0)[l]{\@epitemp}}
+                           \end{picture}\hfil}
+      \fi
+    \fi}
+{\def\@oddhead{%
+\begin{minipage}[t]{\textwidth}
+  \begin{flushright}
+  \fontsize{5}{10}\selectfont\textls{\MakeUppercase{\leftmark}\ \ $\Big\vert$\ \ \thepage}
+  \end{flushright}
+  \vspace{4.375in}
+\fontsize{13}{18}\selectfont
+\begin{center}
+    \hfil#2
+\end{center}
+\end{minipage}}
+}{}{}
+
+% Style for typesetting code without rendered outputs
+\RequirePackage{minted}
+\RequirePackage{fancyvrb}
+\RequirePackage{changepage}
+\RequirePackage{listings}
+
+\xpatchcmd{\inputminted}{\begingroup}{\begingroup\let\itshape\relax\let\slshape\relax}{}{}
+
+\lstset{basicstyle=\fontsize{8}{15}\ttfamily, commentstyle=\upshape, keepspaces, xleftmargin=0.25in}
+\fvset{fontsize=\fontsize{8}{15}\selectfont, obeytabs, xleftmargin=0.25in}
+\setminted{fontsize=\fontsize{8}{15}\selectfont, obeytabs, xleftmargin=0.25in}
+
+
+\markdownSetupSnippet{codeExamplesInCallout}{
+  rendererPrototypes = {
+    headingThree = {%
+      \fontsize{14}{40}\selectfont%
+      \begin{adjustwidth}{0.25in}{0.25in}%
+        \noindent\itshape{#1}%
+      \end{adjustwidth}%
+      \fontsize{11}{15}\selectfont%
+      \normalfont    
+    }, 
+  },
+}
+
+% Style for task lists
+\RequirePackage{enumitem}
+\setlist[itemize]{leftmargin=*,nosep}% 	% items are close together
+
+\markdownSetupSnippet{tasklists}{
+  rendererPrototypes = {
+    headingTwo = {%
+      \noindent\section*{#1}%
+    },
+    documentBegin = {%
+      \setlength\parindent{0.0in}%
+    },
+    documentEnd = {%
+      \setlength\parindent{0.25in}
+    },
+      ulBegin = {%
+        \setlist[itemize,1]{leftmargin=0in} % Removes indent
+        \begin{itemize}%
+      },
+      ulEnd = {%
+        \end{itemize}%
+        \setlist[itemize,1]{leftmargin=*} % Puts it back
+      },
+      ulItem = {%
+        \item[ ]
+      },
+  },
+}
+
+% Style for images with clear background
+\RequirePackage{mdframed}
+
+\newenvironment{cfloat}[1][black!5]{
+  \begin{figure}[ht]
+    \begin{mdframed}[linecolor=white, backgroundcolor=#1]
+    \centering
+}{%
+    \end{mdframed}
+  \end{figure}
+}
+
+\markdownSetupSnippet{add_background_color_under_images}{
+  rendererPrototypes = {
+    image = {%
+      \begin{cfloat}%
+        \includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{#2}%
+      \end{cfloat}%
+    },
+  },
+}
+
+% Style for callout without lines
+\markdownSetupSnippet{orderedListWithoutNumbers}{%
+  rendererPrototypes = {
+      olBegin = {%
+        \setlist[itemize, 1]{leftmargin=0.25in}%
+        \begin{itemize}%
+      },
+      olEnd = {%
+        \end{itemize}%
+        \setlist[itemize,1]{leftmargin=*}
+      },
+      olItem = {%
+          \item[ ]%
+      },
+      olItemWithNumber = {%
+        \item[ ]%
+      },
+  },
+}

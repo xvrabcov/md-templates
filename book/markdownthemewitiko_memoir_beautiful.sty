@@ -1,0 +1,295 @@
+\ProvidesPackage{markdownthemewitiko_memoir_beautiful}
+
+\markdownSetup{
+  contentBlocks = true,
+  taskLists = true,
+  codeSpans = false,
+  citations,
+  definitionLists = true,
+  fencedCode,
+  footnotes,
+  headerAttributes,
+  html,
+  jekyllData,
+  pipeTables,
+  smartEllipses,
+  tableCaptions = true,
+  taskLists,
+  rendererPrototypes = {
+    link = {%
+      \url{#3}%
+    },
+    headerAttributeContextBegin = \begingroup,
+    headerAttributeContextEnd = \endgroup,
+    attributeClassName = {%
+      \markdownSetup{snippet=#1}%
+    },
+  },
+}
+
+
+% Redirect the content block renderer to the image directory
+\let\oldmarkdownRendererContentBlockPrototype=\markdownRendererContentBlockPrototype
+\markdownSetup{
+  rendererPrototypes = {
+    contentBlock = {%
+      \begin{figure}%
+      \oldmarkdownRendererContentBlockPrototype{#1}{../images/#2}{../images/#3}{#4}%
+      \ifx\empty#4\empty\else
+        \caption{#4}%
+      \fi
+      \end{figure}%
+    },
+  },
+}
+
+% Redefining \rightarrow to have straight head
+\usepackage{scalerel}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\let\svrightarrow\rightarrow
+\newcommand{\TSrightarrow}{\mathbin{\tikz[baseline]\draw[arrows={-angle 90},yshift=0.75ex] (0,0) -- (0.75em,0);}}
+\renewcommand\rightarrow{\mathrel{\scalerel*{\TSrightarrow}{\svrightarrow}}}
+
+
+% Typesetting code examples with ``` example md fenced code blocks
+\RequirePackage{adjustbox}
+\RequirePackage{float}
+\RequirePackage{ifthen}
+\RequirePackage{latexsym}
+\RequirePackage{minted}
+\RequirePackage{ragged2e}
+\RequirePackage{tikz}
+\RequirePackage{everypage}
+\let\markdown@witiko@minted@beautiful@oldRendererInputFencedCodePrototype
+  \markdownRendererInputFencedCodePrototype
+\renewcommand\markdownRendererInputFencedCodePrototype[2]{%
+  \def\next##1 ##2\relax{%
+    \ifthenelse{\equal{##1}{example}}{%
+      \smallskip
+      \nopagebreak[4]%
+      \noindent
+      \begin{minipage}{0.4\textwidth}%
+      \directlua{disable_pretty_tex_and_latex_logos()}%
+      \inputminted{##2}{#1}%
+      \directlua{enable_pretty_tex_and_latex_logos()}%
+      \end{minipage}%
+      \begin{minipage}{0.2\textwidth}%
+        \centering
+        {\Huge $\rightarrow$}%
+      \end{minipage}%
+      \begin{minipage}{0.4\textwidth}%
+      \begingroup
+        \justify
+        \ifthenelse{\equal{##2}{md }}{%
+          % Replace all occurences of ␣ with spaces
+          \directlua{
+            local file = io.open("#1", "r")
+            local content = file:read("*a"):gsub("␣", " ")
+            file:close()
+            local file = io.open("#1.filtered", "w")
+            file:write(content)
+            file:close()
+          }%
+          \markdownInput[snippet=witiko/memoir/beautiful/example]{#1.filtered}%
+        }{%
+          \input #1\relax
+        }%
+      \endgroup
+      \end{minipage}\par
+    }{%
+      \markdown@witiko@minted@beautiful@oldRendererInputFencedCodePrototype{#1}{#2}%
+    }%
+  }%
+  \next#2 \relax
+}
+\let\oldmarkdownRendererBlockQuoteBeginPrototype=\markdownRendererBlockQuoteBeginPrototype
+\let\oldmarkdownRendererBlockQuoteEndPrototype=\markdownRendererBlockQuoteEndPrototype
+\markdownSetupSnippet{example}{
+  texComments,
+% code = {%
+%   \AddEverypageHook{%
+%     \begin{tikzpicture}[remember picture, overlay]
+%       \node[anchor=north west] at (current page.north west) {
+%         \includegraphics[width=\paperwidth, height=\paperheight]{example-background}
+%       };
+%     \end{tikzpicture}%
+%   }%
+% },
+  rendererPrototypes = {
+    headingOne = {{\Huge\bfseries #1}},
+    headingTwo = {\section*{#1}},
+    headingThree = {\subsection*{#1}},
+    headingFour = {\subsubsection*{#1}},
+    headingFive = {\paragraph{#1}\leavevmode},
+    headingSix = {\subparagraph{#1}\leavevmode},
+    image = {%
+      \begin{figure}[H]%
+        \begin{center}%
+          \adjustbox{max width=\linewidth}{\includegraphics{#3}}%
+        \end{center}%
+        \ifx\empty#4\empty\else
+          \caption{#4}%
+        \fi
+      \end{figure}
+    },
+    footnote = {%
+      \renewcommand{\thempfootnote}{\arabic{mpfootnote}}%
+      \footnotemark[1]%
+      \footnotetext[1]{#1}%
+    },
+    table = {%
+      \markdownLaTeXTable={}%
+      \markdownLaTeXTableAlignment={}%
+      \markdownLaTeXTableEnd={%
+        \markdownLaTeXBottomRule
+        \end{tabular}}%
+      \ifx\empty#1\empty\else
+        \addto@hook\markdownLaTeXTable{%
+          \begin{table}[H]
+          \centering}%
+        \addto@hook\markdownLaTeXTableEnd{%
+          \caption{#1}
+          \end{table}}%
+      \fi
+      \addto@hook\markdownLaTeXTable{\begin{tabular}}%
+      \markdownLaTeXRowCounter=0%
+      \markdownLaTeXRowTotal=#2%
+      \markdownLaTeXColumnTotal=#3%
+      \markdownLaTeXRenderTableRow
+    },
+    blockQuoteBegin = {%
+      \begingroup
+      \markdownSetup{
+        rendererPrototypes = {
+          blockQuoteBegin = {%
+            \oldmarkdownRendererBlockQuoteBeginPrototype
+            \begingroup
+            \markdownSetup{
+              rendererPrototypes = {
+                blockQuoteBegin = {%
+                  \oldmarkdownRendererBlockQuoteBeginPrototype
+                  \begingroup
+                },
+                blockQuoteEnd = {%
+                  \endgroup
+                  \markdownRendererBlockQuoteEndPrototype
+                },
+              },
+            }
+          },
+        }%
+      }%
+    },
+    blockQuoteEnd = {%
+      \endgroup
+    },
+    jekyllDataString = {
+      \ifthenelse{\equal{#1}{author}}{%
+        \def\exampleauthor{#2}
+      }{%
+        \def\exampletitle{#2}
+      }
+    },
+    jekyllDataEnd = {%
+      \centering
+      \LARGE\bfseries\exampletitle\par
+      \large\bfseries\exampleauthor\par
+    },
+    documentEnd = {},
+  },
+}
+
+% Graphics
+\markdownSetup{
+  rendererPrototypes = {
+    image = {%
+      \begin{figure}%
+        \begin{center}%
+          \includegraphics{#3}%
+        \end{center}%
+        \ifx\empty#4\empty\else
+          \caption{#4}%
+        \fi
+      \end{figure}%
+    },
+  }
+}
+
+% Special style for the copyright page
+\markdownSetupSnippet{copyright_page}{
+  rendererPrototypes = {
+    interblockSeparator = {%
+      \par\bigskip
+    },
+  },
+}
+
+% Special style for the introductory chapter
+\markdownSetupSnippet{introduction}{
+  rendererPrototypes = {
+    headingOne = {%
+      \chapter*{#1}%
+      \markboth{\MakeUppercase{#1}}{\MakeUppercase{#1}}%
+    },
+  },
+}
+
+% Special style for chapters with drop caps
+\RequirePackage{type1cm}
+\RequirePackage{lettrine}
+\RequirePackage{xstring}
+\markdownSetupSnippet{dropcap}{
+  rendererPrototypes = {
+    headingOne = {%
+      \markdownRendererHeadingOnePrototype{#1}%
+      \begingroup
+      \def\markdownEnd{\relax \relax}%
+      \long\def\markdownRendererInterblockSeparator##1##2 {%
+        \par\leavevmode
+        \StrChar{##2}{1}[\head]%
+        \StrGobbleLeft{##2}{1}[\tail]%
+        \lettrine[findent=0.1em,nindent=0pt,lhang=0.15]{\head}{\tail}
+        \long\def\markdownRendererInterblockSeparator{%
+          \par
+          \endgroup
+        }%
+      }%
+    },
+  },
+}
+
+% Chapters that end with endnotes, bibliography, or both
+\newif\ifendnotes
+\endnotesfalse
+\markdownSetupSnippet{endnotes}{%
+  code = {%
+    \global\endnotestrue
+  },
+}
+
+\newif\ifbib
+\bibfalse
+\markdownSetupSnippet{bib}{%
+  code = {%
+    \global\bibtrue
+  },
+}
+
+\markdownSetup{
+  rendererPrototypes = {
+    documentBegin = {%
+      \global\endnotesfalse
+      \global\bibfalse
+    },
+    documentEnd = {%
+      \ifendnotes
+        \theendnotes
+      \fi
+      \ifbib
+        \section*{\bibname}%
+        \printbibliography[section=\the\value{refsection}, heading=none]%
+      \fi
+    },
+  },
+}
