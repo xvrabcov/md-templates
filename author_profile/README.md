@@ -8,5 +8,5 @@ This document is often a part of the media kit, distributed at book fairs and co
 
 Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which first page looks like this:
 
-![Example output of the template](driver.png)
+![Example output of the template](https://github.com/xvrabcov/md-templates/releases/download/latest/author_profile-output.png)
 

@@ -10,8 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - run: apt-get update && apt-get install -y imagemagick
+      - run: |
+          DQT='"' 
+          SRC="rights=${DQT}none${DQT} pattern=${DQT}PDF${DQT}"
+          RPL="rights=${DQT}read\|write${DQT} pattern=${DQT}PDF${DQT}"
+          sed -i "s/$SRC/$RPL/" /etc/ImageMagick-6/policy.xml
+
       - run: latexmk -shell-escape -lualatex -cd author_profile/driver
       - run: mv author_profile/driver.pdf author_profile-example.pdf
+      - run: convert -density 600 author_profile-example.pdf[0] -background white -alpha remove author_profile-output.png
 
       - run: latexmk -shell-escape -lualatex -cd background_facts/driver
       - run: mv background_facts/driver.pdf background_facts-example.pdf
@@ -94,3 +102,4 @@ jobs:
             qna-example.pdf
             report-example.pdf
             scenario-example.pdf
+            author_profile-output.pdf
