@@ -30,7 +30,7 @@ jobs:
 
       - run: latexmk -shell-escape -lualatex -cd book/driver
       - run: mv book/driver.pdf book-example.pdf
-      - run: convert -density 300 book-example.pdf[14 -background white -alpha remove book-output.png
+      - run: convert -density 300 book-example.pdf[14] -background white -alpha remove book-output.png
       - run: optipng -o 7 book-output.png
 
       - run: latexmk -shell-escape -lualatex -cd book_facts/driver
