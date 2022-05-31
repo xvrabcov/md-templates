@@ -10,3 +10,5 @@ Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file whic
 
 ![Example output of the template](https://github.com/xvrabcov/md-templates/releases/download/latest/author_profile-output.png)
 
+The template works with TeX Live 2021.
+
