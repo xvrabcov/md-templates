@@ -140,7 +140,6 @@ jobs:
             qna-example.pdf
             report-example.pdf
             scenario-example.pdf
-
             author_profile-output.png
             background_facts-output.png
             book-output.png
