@@ -24,7 +24,7 @@ Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file whic
 
 ![Example output of the template](https://github.com/xvrabcov/md-templates/releases/download/latest/business_card-output.png)
 
-The template works with TeX Live 2021.
+The template works with TeX Live 2021. We are currently using the `witiko/markdown:TL2021-historic` Docker image.
 
 
 The development of these templates has been a part of the research project [MUNI/33/0776/2021](https://www.muni.cz/en/research/projects/62168), funded by the Faculty of Informatics, Masaryk University.
