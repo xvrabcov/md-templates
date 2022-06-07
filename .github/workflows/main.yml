@@ -10,108 +10,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: apt-get update && apt-get install -y imagemagick
+      - run: apt-get update && apt-get install -y imagemagick && apt-get install -y optipng
       - run: |
           DQT='"' 
           SRC="rights=${DQT}none${DQT} pattern=${DQT}PDF${DQT}"
           RPL="rights=${DQT}read\|write${DQT} pattern=${DQT}PDF${DQT}"
           sed -i "s/$SRC/$RPL/" /etc/ImageMagick-6/policy.xml
-      - run: apt-get update && apt-get install -y optipng
-
-      - run: latexmk -shell-escape -lualatex -cd author_profile/driver
-      - run: mv author_profile/driver.pdf author_profile-example.pdf
-      - run: convert -density 300 author_profile-example.pdf[0] -background white -alpha remove author_profile-output.png
-      - run: optipng -o 7 author_profile-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd background_facts/driver
-      - run: mv background_facts/driver.pdf background_facts-example.pdf
-      - run: convert -density 300 background_facts-example.pdf[0] -background white -alpha remove background_facts-output.png
-      - run: optipng -o 7 background_facts-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd book/driver
-      - run: mv book/driver.pdf book-example.pdf
-      - run: convert -density 300 book-example.pdf[14] -background white -alpha remove book-output.png
-      - run: optipng -o 7 book-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd book_facts/driver
-      - run: mv book_facts/driver.pdf book_facts-example.pdf
-      - run: convert -density 300 book_facts-example.pdf[0] -background white -alpha remove book_facts-output.png
-      - run: optipng -o 7 book_facts-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd book_proposal/driver
-      - run: mv book_proposal/driver.pdf book_proposal-example.pdf
-      - run: convert -density 300 book_proposal-example.pdf[0] -background white -alpha remove book_proposal-output.png
-      - run: optipng -o 7 book_proposal-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd bookmark/driver
-      - run: mv bookmark/driver.pdf bookmark-example.pdf
-      - run: convert -density 300 bookmark-example.pdf[0] -background white -alpha remove bookmark-output.png
-      - run: optipng -o 7 bookmark-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd business_card/driver
-      - run: mv business_card/driver.pdf business_card-example.pdf
-      - run: convert -density 300 business_card-example.pdf[0] -background white -alpha remove business_card-output.png
-      - run: optipng -o 7 business_card-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd content_outline/driver
-      - run: mv content_outline/driver.pdf content_outline-example.pdf
-      - run: convert -density 300 content_outline-example.pdf[0] -background white -alpha remove content_outline-output.png
-      - run: optipng -o 7 content_outline-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd envelope/driver
-      - run: mv envelope/driver.pdf envelope-example.pdf
-      - run: convert -density 300 envelope-example.pdf[0] -background white -alpha remove envelope-output.png
-      - run: optipng -o 7 envelope-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd letterhead/driver
-      - run: mv letterhead/driver.pdf letterhead-example.pdf
-      - run: convert -density 300 letterhead-example.pdf[0] -background white -alpha remove letterhead-output.png
-      - run: optipng -o 7 letterhead-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd marketing_plan/driver
-      - run: mv marketing_plan/driver.pdf marketing_plan-example.pdf
-      - run: convert -density 300 marketing_plan-example.pdf[0] -background white -alpha remove marketing_plan-output.png
-      - run: optipng -o 7 marketing_plan-output.png
-  
-      - run: latexmk -shell-escape -lualatex -cd media_kit_label/driver
-      - run: mv media_kit_label/driver.pdf media_kit_label-example.pdf
-      - run: convert -density 300 media_kit_label-example.pdf[0] -background white -alpha remove media_kit_label-output.png
-      - run: optipng -o 7 media_kit_label-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd postcard/driver
-      - run: mv postcard/driver.pdf postcard-example.pdf
-      - run: convert -density 300 postcard-example.pdf[1] -background white -alpha remove postcard-output.png
-      - run: optipng -o 7 postcard-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd poster/driver
-      - run: mv poster/driver.pdf poster-example.pdf
-      - run: convert -density 300 poster-example.pdf[0] -background white -alpha remove poster-output.png
-      - run: optipng -o 7 poster-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd press_release/driver
-      - run: mv press_release/driver.pdf press_release-example.pdf
-      - run: convert -density 300 press_release-example.pdf[0] -background white -alpha remove press_release-output.png
-      - run: optipng -o 7 press_release-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd publishing_plan/driver
-      - run: mv publishing_plan/driver.pdf publishing_plan-example.pdf
-      - run: convert -density 300 publishing_plan-example.pdf[0] -background white -alpha remove publishing_plan-output.png
-      - run: optipng -o 7 publishing_plan-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd qna/driver
-      - run: mv qna/driver.pdf qna-example.pdf
-      - run: convert -density 300 qna-example.pdf[0] -background white -alpha remove qna-output.png
-      - run: optipng -o 7 qna-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd report/driver
-      - run: mv report/driver.pdf report-example.pdf
-      - run: convert -density 300 report-example.pdf[0] -background white -alpha remove report-output.png
-      - run: optipng -o 7 report-output.png
-
-      - run: latexmk -shell-escape -lualatex -cd scenario/driver
-      - run: mv scenario/driver.pdf scenario-example.pdf
-      - run: convert -density 300 scenario-example.pdf[0] -background white -alpha remove scenario-output.png
-      - run: optipng -o 7 scenario-output.png
+      - run: | 
+          for template in $(ls -d -- */)
+          do 
+            curtemp=$(echo $template | sed 's/.$//')
+            echo $curtemp
+            latexmk -lualatex -cd $curtemp/driver
+            mv $curtemp/driver.pdf $curtemp-example.pdf
+            if [ "$curtemp" = "book" ]; then
+              convert -density 300 $curtemp-example.pdf[14] -background white -alpha remove $curtemp-output.png
+            elif [ "$curtemp" = "postcard" ]; then
+              convert -density 300 $curtemp-example.pdf[1] -background white -alpha remove $curtemp-output.png
+            else
+              convert -density 300 $curtemp-example.pdf[0] -background white -alpha remove $curtemp-output.png
+            fi
+            optipng -o 7 $curtemp-output.png
+          done
 
       - uses: marvinpinto/action-automatic-releases@latest
         if: github.ref == 'refs/heads/main'
