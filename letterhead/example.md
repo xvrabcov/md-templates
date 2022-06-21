@@ -5,7 +5,7 @@ email: |
   nom dot plume  
   (at) templates  
   dot com
-addressFrom: |
+address: |
   Long address  
   with multiple lines  
   MA, USA

@@ -1,0 +1,38 @@
+\NeedsTeXFormat{LaTeX2e}%
+\ProvidesPackage{common_class}%
+
+\RequirePackage{array}%
+\RequirePackage{eso-pic}%
+\RequirePackage{etoolbox}%
+\RequirePackage{fancyhdr}%
+\RequirePackage{fontawesome}%
+\RequirePackage{graphicx}%
+\RequirePackage{geometry}%
+\RequirePackage[hidelinks,pdfa]{hyperref}%
+\RequirePackage{ifthen}%
+\RequirePackage{keyval}%
+\RequirePackage[theme=xvrabcov/mdtemp/blocks]{markdown}%
+\RequirePackage{minipage-marginpar}%
+\RequirePackage[all]{nowidow}
+\RequirePackage{qrcode}%
+\RequirePackage{tabularx}%
+\RequirePackage{tikz}%
+\RequirePackage{tikzpagenodes}%
+\RequirePackage{wrapfig}
+\RequirePackage{xcolor}%
+
+\long\def\mdtemp#1{%
+  \setkeys{mdtemp}{#1}}
+
+\newcommand{\mdtemp@def}[2][]{%
+  \expandafter\def\csname mdtemp@#2\endcsname{%
+    <<\ifx\mdtemp@empty#1\mdtemp@empty#2\else#1\fi>>}}
+
+\mdtemp@def{address}%
+\mdtemp@def{author}%
+\mdtemp@def{booktitle}%
+\mdtemp@def{email}%
+\mdtemp@def{phone}%
+\mdtemp@def{subtitle}%
+\mdtemp@def{title}%
+\mdtemp@def{url}%

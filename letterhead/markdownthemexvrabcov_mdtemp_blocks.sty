@@ -1,0 +1,61 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+\def\mdtemp@header{%
+  \noindent%
+  \hspace{-3.5pt}%
+  \begin{tikzpicture}[remember picture, minimum height=1cm]
+    \node (title) {\parbox{0.5\textwidth}{\mdtemp@addressTo}};
+    \draw%
+      let%
+        \p1=(title.north east),%
+        \p2=(title.south east),%
+        \p3=(current page.east)%
+      in%
+        (\x3, \y1) node[\backgroundColor, fill, anchor=north east, minimum height=\y1 - \y2, minimum width=2.5cm] (sqr) {};%
+    \draw%
+      let%
+        \p1=(sqr.west)%
+      in%
+        (\x1 - 0.5cm, \y1) node[anchor=east] (logo) {\includegraphics[width=2.5cm, keepaspectratio]{logo}};%
+  \end{tikzpicture}%
+  \large%
+  \vspace{0.5cm}\par%
+  \hfill\today%
+}
+
+\def\mdtemp@footer{%
+  \mdtemp@foot%
+}
+
+
+\markdownSetup
+{
+  jekyllData = true,
+  theme = xvrabcov/mdtemp/qrcode,
+  theme = xvrabcov/mdtemp/rulepagebreak,
+  theme = xvrabcov/mdtemp/setcolours,
+  theme = xvrabcov/mdtemp/headfoot,
+  rendererPrototypes={
+    headingOne = {%
+      {\LARGE{\textbf{#1}}}\par\large%
+      \vspace{4\medskipamount}%
+    },
+    headingTwo = {%
+      #1\par%
+      \vspace{4\medskipamount}%
+    },
+    interblockSeparator = {%
+      \par\par%
+    },
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdtemp@#1\endcsname{#2}%
+}
+
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdtemp@header%
+  \mdtemp@footer%
+}

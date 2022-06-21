@@ -46,6 +46,8 @@ Who do you want to get to read your book? And don't say everyone, that won't hap
 # Distribution
 Where will you print your books? One central place? Multiple independent sel-publishing houses? There's just too many options not to reveal it!
 
+___
+
 # Publicity Campaigns
 ## Target x Channel Matrix
 ## Budget

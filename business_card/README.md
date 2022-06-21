@@ -6,7 +6,7 @@ Business cards are useful in all stages of book publishing, as well as outside o
 
 ## Usage
 
-Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
+Running `TEXINPUTS=./common_code: latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
 
 ![Example output of the template](https://github.com/xvrabcov/md-templates/releases/download/latest/business_card-output.png)
 

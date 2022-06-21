@@ -1,0 +1,57 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+\def\mdtemp@header{%
+  \mdtemp@head%
+  \large%
+  \vspace{0.5cm}\par%
+}
+
+\def\mdtemp@footer{%
+  \mdtemp@foot%
+}
+
+\def\mdtemp@titlePage{%
+  \thispagestyle{empty}%
+  \vspace{2.5cm}%
+  \begin{center}
+    \Huge{\mdtemp@booktitle}\par\vspace{0.125cm}%
+    \ifx\mdplan@subtitle\empty\else%
+      \Large{\textit{\mdtemp@subtitle}}\par\vspace{0.125cm}%
+    \fi%
+    \LARGE{\mdtemp@author}
+  \end{center}%
+  \large\par%
+  \newpage%
+}
+
+\markdownSetup
+{
+  definitionLists = true,
+  jekyllData = true,
+  pipeTables = true,
+  tableCaptions = true,
+  taskLists = true,
+  theme = xvrabcov/mdtemp/letterhead/headings,
+  theme = xvrabcov/mdtemp/qrcode,
+  theme = xvrabcov/mdtemp/rulepagebreak,
+  theme = xvrabcov/mdtemp/setcolours,
+  theme = xvrabcov/mdtemp/headfoot,
+  rendererPrototypes={
+    interblockSeparator = {%
+      \par\par%
+    },
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdtemp@#1\endcsname{#2}%
+}
+
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdtemp@header%
+  \mdtemp@footer%
+  \mdtemp@titlePage%
+  \newpage%
+}
+

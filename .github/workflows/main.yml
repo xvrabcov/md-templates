@@ -21,7 +21,7 @@ jobs:
           do 
             curtemp=$(echo $template | sed 's/.$//')
             echo $curtemp
-            latexmk -shell-escape -lualatex -cd $curtemp/driver
+            TEXINPUTS=./common_code: latexmk -shell-escape -lualatex -cd $curtemp/driver
             mv $curtemp/driver.pdf $curtemp-example.pdf
             if [ "$curtemp" = "book" ]; then
               convert -density 300 $curtemp-example.pdf[14] -background white -alpha remove $curtemp-output.png

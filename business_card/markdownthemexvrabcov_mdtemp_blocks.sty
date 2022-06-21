@@ -1,0 +1,49 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{enumitem}
+
+\markdownSetup{
+  jekyllData = true,
+  tightLists = true,
+  theme = xvrabcov/mdtemp/setcolours,
+  rendererPrototypes = {
+    documentBegin = {%
+      \begin{tikzpicture}[remember picture, minimum width=1cm, overlay]%
+        \draw%
+          let%
+            \p1=(current page.south west),%
+            \p2=(current page.south east),%
+            \p3=(current page.north west),%
+          in%
+            (\x2, \y2) node[rotate=-30, \backgroundColor, fill, anchor=south east, minimum height=\y3 - \y2, minimum width=4cm] (sqr) {};%
+      \end{tikzpicture}%
+    },
+    headingOne = {%
+      \Large\MakeUppercase{\textbf{#1}}\par%
+      \normalsize%
+    },
+    headingTwo = {%
+      \textcolor{gray}{\textbf{#1}}\par%
+    },
+    ulBegin = {%
+      \vfill%
+      \begin{itemize}[leftmargin=0.40in]%
+    },
+    ulEnd = {%
+      \end{itemize}%
+      \vfill%
+    },
+  },
+}
+
+% Replacing item bullets
+\renewcommand{\labelitemi}{%
+  \textcolor{\backgroundColor}{\rotatebox[origin=c]{45}{$\blacksquare$}}%
+}
+
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdtemp@#1\endcsname{#2}%
+}

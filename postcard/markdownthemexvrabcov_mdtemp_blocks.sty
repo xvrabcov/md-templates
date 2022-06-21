@@ -1,0 +1,64 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+\pagestyle{empty}%
+
+\markdownSetup
+{
+  jekyllData = true,
+  theme = xvrabcov/mdtemp/setcolours,
+  rendererPrototypes={
+    headingOne = {%
+      \hspace{0.125in}%
+      \begin{minipage}[b]{0.4\textwidth}%
+        \begin{center}
+          \Large\textbf{#1}%
+          \vspace{0.25in}%
+        \end{center}%
+      \end{minipage}%
+    },
+    headingTwo = {%
+      \hspace{0.125in}%
+      \begin{minipage}[b]{0.4\textwidth}%
+        \begin{center}%
+          \large\textit{#1}%
+            \par%
+        \end{center}%
+      \end{minipage}%
+    },
+    image = {%
+      \noindent\includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{#2}%
+      \newpage%
+      \letterLines%
+    },
+  },
+}
+
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+
+\newcommand{\letterLines}{%
+\begin{tikzpicture}[overlay, remember picture]
+    \draw[line width=0.03125in, \backgroundColor] ([yshift=-0.5in]current page.north) -- ([yshift=0.5in]current page.south);%
+    \node[draw, anchor=north east, xshift=-0.25in, yshift=-0.25in, minimum width=0.8in, minimum height=0.9in, \backgroundColor] (x) at (current page.north east) {};%
+    \coordinate%
+      let%
+        \p1=(current page.north),%
+        \p2=(x.south)%
+      in%
+        (\x1 + 0.25in, \y2 - 0.25in) coordinate (ls);%
+    \coordinate%
+      let%
+        \p1=(x.south east),%
+        \p2=(ls),%
+      in
+        (\x1 - 0.125in, \y2) coordinate (rs);%
+    \foreach \k in {1, 2, 3, 4, 5}{
+    \draw[\backgroundColor] ([yshift=-\k*0.375in]ls) -- ([yshift=-\k*0.375in]rs);
+  }
+  \end{tikzpicture}
+}
+
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdtemp@#1\endcsname{#2}%
+}

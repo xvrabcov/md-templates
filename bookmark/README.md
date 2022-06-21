@@ -6,7 +6,7 @@ Bookmarks are often distributed as a promotional item at book fairs, conventions
 
 ## Usage
 
-Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
+Running `TEXINPUTS=./common_code: latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
 
 ![Example output of the template](https://github.com/xvrabcov/md-templates/releases/download/latest/bookmark-output.png)
 

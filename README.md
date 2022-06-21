@@ -3,7 +3,7 @@ This repository contains a number of LaTeX templates utilising the [witiko/markd
 
 To typeset an example document, simply navigate to the template directory you want to use and call
 
-`latexmk -lualatex driver.tex`
+`TEXINPUTS=./common_code: latexmk -lualatex driver.tex`
 
 ## Example: Business Card
 Navigate to the `business_card` directory and open the `example.md` file with a text editor. The business card `example.md` looks initially like this:
@@ -20,7 +20,7 @@ Navigate to the `business_card` directory and open the `example.md` file with a 
 ```
 The contents of this file can be changed.
 
-Running `latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
+Running `TEXINPUTS=./common_code: latexmk -lualatex driver.tex` gives us an output `driver.pdf` file which looks like this:
 
 ![Example output of the template](https://github.com/xvrabcov/md-templates/releases/download/latest/business_card-output.png)
 

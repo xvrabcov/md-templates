@@ -1,0 +1,14 @@
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_letterhead_headings}
+
+\markdownSetup{
+  rendererPrototypes = {
+    headingOne = {%
+      \vspace{0.25in}%
+      {\LARGE{\textbf{#1}}}\par\large%
+    },
+    headingTwo = {%
+      \vspace{0.25in}%
+      {\Large{\textbf{#1}}}\par\large%
+    },
+  },
+}

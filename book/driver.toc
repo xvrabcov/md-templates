@@ -1,0 +1,7 @@
+\contentsline {part}{I\hspace {1em}Starting with Writing a Book}{3}{part.1}%
+\contentsline {chapter}{\chapternumberline {1}An Example Chapter}{5}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Example Section}{5}{section.1.1}%
+\contentsline {chapter}{\chapternumberline {2}A Long Chapter}{7}{chapter.2}%
+\contentsline {part}{II\hspace {1em}Appendices}{9}{part.2}%
+\contentsline {appendix}{\chapternumberline {A}An Example of Appendix}{11}{appendix.A}%
+\contentsfinish 

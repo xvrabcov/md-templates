@@ -1,0 +1,53 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+\def\mdtemp@header{%
+  \mdtemp@head%
+  \large%
+}
+
+\def\mdtemp@footer{%
+  \mdtemp@foot%
+}
+
+\markdownSetup
+{
+  jekyllData = true,
+  definitionLists = true,
+  theme = xvrabcov/mdtemp/letterhead/headings,
+  theme = xvrabcov/mdtemp/qrcode,
+  theme = xvrabcov/mdtemp/rulepagebreak,
+  theme = xvrabcov/mdtemp/setcolours,
+  theme = xvrabcov/mdtemp/headfoot,
+  rendererPrototypes={
+    interblockSeparator = {%
+      \par\par%
+    },
+    image = {%
+      \begin{wrapfigure}{r}{5cm}
+        \includegraphics[width=\linewidth, keepaspectratio]{#2}%
+        %\vspace{-1cm}%
+        \caption*{\textit{#1}}%
+      \end{wrapfigure}%
+    },
+    dlItem = {%
+      \noindent\begin{minipage}[t]{0.6\textwidth}\Large{\textbf{#1: }}%
+    },
+    dlDefinitionEnd = {%
+      \end{minipage}\par\vspace{0.25cm}\par%
+    },
+    dlBegin = {},
+    dlEnd = {},
+    dlBeginTight = {},
+    dlEndTight = {},
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdtemp@#1\endcsname{#2}%
+}
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdtemp@header%
+  \mdtemp@footer%
+}
+

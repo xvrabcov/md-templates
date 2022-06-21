@@ -1,0 +1,13 @@
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_qrcode}
+
+\markdownSetup{
+  rendererPrototypes = {
+    link = {%
+      \begin{minipage}{\textwidth}
+        \emph{#1}\\%
+        \url{#2}\par%
+      \end{minipage}%
+      \vspace{0.5cm}%
+    },
+  },
+}

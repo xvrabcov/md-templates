@@ -1,0 +1,16 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+\pagestyle{empty}%
+
+\markdownSetup
+{
+  jekyllData = true,
+  rendererPrototypes={
+    image = {%
+      \begin{minipage}[c][\textheight][c]{\textwidth}%
+        \includegraphics[width=\textwidth, height=\textheight, keepaspectratio]{#2}%
+      \end{minipage}%
+    }, 
+  },
+}

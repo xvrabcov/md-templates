@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{markdownthemexvrabcov_mdtemp_blocks}
+
+
+\def\mdtemp@header{%
+  \mdtemp@head%
+  \large%
+  \vspace{0.5cm}\par%
+  \Huge{\mdtemp@booktitle}\par\vspace{0.25cm}%
+  \hspace{0.5cm} \Large{by} \par\vspace{0.25cm}%
+  \Huge{\mdtemp@author}\large\par%
+}
+
+\def\mdtemp@footer{%
+  \mdtemp@foot%
+}
+
+
+\markdownSetup
+{
+  jekyllData = true,
+  theme = xvrabcov/mdtemp/letterhead/headings,
+  theme = xvrabcov/mdtemp/qrcode,
+  theme = xvrabcov/mdtemp/rulepagebreak,
+  theme = xvrabcov/mdtemp/setcolours,
+  theme = xvrabcov/mdtemp/headfoot,
+  rendererPrototypes={
+    interblockSeparator = {%
+      \par\par%
+    },
+  },
+}
+\renewcommand*\markdownRendererJekyllDataStringPrototype[2]{%
+  \expandafter\gdef\csname mdtemp@#1\endcsname{#2}%
+}
+
+
+\renewcommand*\markdownRendererJekyllDataEnd{%
+  \mdtemp@header%
+  \mdtemp@footer%
+}
+
