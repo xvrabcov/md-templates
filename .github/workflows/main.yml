@@ -6,7 +6,7 @@ jobs:
     name: Typeset example documents
     runs-on: ubuntu-latest
     container:
-      image: witiko/markdown:TL2021-historic
+      image: witiko/markdown:2.15.2-50-g29197b2-TL2021-historic
     steps:
       - uses: actions/checkout@v2
 
